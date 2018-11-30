@@ -41,8 +41,8 @@ resource "aws_iam_role_policy" "main" {
         "logs:PutLogEvents"
       ],
       "Resource": [
-        "${aws_iam_role.main.arn}:*:*",
-        "${aws_iam_role.main.arn}"
+        "${aws_cloudwatch_log_group.main.arn}:*:*",
+        "${aws_cloudwatch_log_group.main.arn}"
       ]
     }
   ]
