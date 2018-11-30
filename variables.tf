@@ -22,3 +22,10 @@ variable "log_retention_in_days" {
   description = "Specifies the number of days you want to retain log events"
   default     = 30
 }
+
+# depends_on workaround
+
+variable "depends_on" {
+  description = "Helper variable to simulate depends_on for terraform modules"
+  default     = []
+}
