@@ -10,7 +10,7 @@ resource "aws_cloudwatch_log_group" "main" {
   retention_in_days = "${local.log_retention_in_days}"
 }
 
-resource "aws_iam_role" "main" {
+resource "aws_iam_role" "execution" {
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -27,8 +27,8 @@ resource "aws_iam_role" "main" {
 EOF
 }
 
-resource "aws_iam_role_policy" "main" {
-  role = "${aws_iam_role.main.name}"
+resource "aws_iam_role_policy" "execution" {
+  role = "${aws_iam_role.execution.name}"
 
   policy = <<EOF
 {
@@ -50,6 +50,23 @@ resource "aws_iam_role_policy" "main" {
 EOF
 }
 
+resource "aws_iam_role" "task" {
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_ecs_task_definition" "main" {
   family = "${var.name}"
 
@@ -57,7 +74,8 @@ resource "aws_ecs_task_definition" "main" {
 
   requires_compatibilities = ["FARGATE"]
 
-  execution_role_arn = "${aws_iam_role.main.arn}"
+  execution_role_arn = "${aws_iam_role.execution.arn}"
+  task_role_arn      = "${aws_iam_role.task.arn}"
 
   cpu    = "${var.cpu}"
   memory = "${var.memory}"

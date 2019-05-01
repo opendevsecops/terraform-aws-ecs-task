@@ -14,12 +14,20 @@ output "memory" {
   value = "${var.memory}"
 }
 
-output "role_arn" {
-  value = "${aws_iam_role.main.arn}"
+output "execution_role_arn" {
+  value = "${aws_iam_role.execution.arn}"
 }
 
-output "role_name" {
-  value = "${aws_iam_role.main.name}"
+output "execution_role_name" {
+  value = "${aws_iam_role.execution.name}"
+}
+
+output "task_role_arn" {
+  value = "${aws_iam_role.task.arn}"
+}
+
+output "task_role_name" {
+  value = "${aws_iam_role.task.name}"
 }
 
 output "log_group" {
