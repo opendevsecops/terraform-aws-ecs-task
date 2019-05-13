@@ -94,6 +94,7 @@ resource "aws_ecs_task_definition" "main" {
         "awslogs-stream-prefix": "ecs"
       }
     }
+    ${var.container_definition_extra == "" ? "" : ",${var.container_definition_extra}"}
   }
 ]
 EOF

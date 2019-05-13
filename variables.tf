@@ -23,6 +23,11 @@ variable "log_retention_in_days" {
   default     = 30
 }
 
+variable "container_definition_extra" {
+  description = "Extra configuration for the main container definition"
+  default     = ""
+}
+
 # depends_on workaround
 
 variable "depends_on" {
