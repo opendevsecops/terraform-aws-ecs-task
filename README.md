@@ -3,7 +3,7 @@
 
 # AWS ECS Task Terraform Module
 
-A helper module to deploy ECS task in a consistent way.
+A helper module to define ECS task in a consistent way.
 
 ## Getting Started
 

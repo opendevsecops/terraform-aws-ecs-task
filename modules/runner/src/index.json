@@ -1,0 +1,32 @@
+{
+    "StartAt": "Run an ECS Task",
+    "States": {
+        "Run an ECS Task": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::ecs:runTask.sync",
+            "Parameters": {
+                "LaunchType": "FARGATE",
+                "Cluster.$": "$.cluster",
+                "TaskDefinition.$": "$.taskDefinition",
+                "NetworkConfiguration": {
+                    "AwsvpcConfiguration": {
+                        "Subnets.$": "$.clusterVpcSubnets"
+                    }
+                },
+                "Overrides": {
+                    "ContainerOverrides": [{
+                        "Name.$": "$.taskName",
+                        "Environment.$": "$.taskEnvironment"
+                    }]
+                }
+            },
+            "Retry": [{
+                "ErrorEquals": ["States.ALL"],
+                "IntervalSeconds": 10,
+                "BackoffRate": 2.0,
+                "MaxAttempts": 10
+            }],
+            "End": true
+        }
+    }
+}

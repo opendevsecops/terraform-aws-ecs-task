@@ -37,13 +37,20 @@ resource "aws_iam_role_policy" "execution" {
     {
       "Effect": "Allow",
       "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "logs:CreateLogStream",
         "logs:PutLogEvents"
       ],
-      "Resource": [
-        "${aws_cloudwatch_log_group.main.arn}:*:*",
-        "${aws_cloudwatch_log_group.main.arn}"
-      ]
+      "Resource": "*"
     }
   ]
 }
