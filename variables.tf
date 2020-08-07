@@ -1,11 +1,11 @@
 variable "name" {
   description = "The name for this task"
-  type        = "string"
+  type        = string
 }
 
 variable "image" {
   description = "The image for this task"
-  type        = "string"
+  type        = string
 }
 
 variable "cpu" {
@@ -27,3 +27,4 @@ variable "container_definition_extra" {
   description = "Extra configuration for the main container definition"
   default     = ""
 }
+

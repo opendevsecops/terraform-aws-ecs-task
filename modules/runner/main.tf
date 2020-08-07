@@ -1,6 +1,8 @@
-data "aws_region" "current" {}
+data "aws_region" "current" {
+}
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 resource "aws_iam_role" "main" {
   assume_role_policy = <<EOF
@@ -20,10 +22,11 @@ resource "aws_iam_role" "main" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "main" {
-  role = "${aws_iam_role.main.id}"
+  role = aws_iam_role.main.id
 
   policy = <<EOF
 {
@@ -69,16 +72,17 @@ resource "aws_iam_role_policy" "main" {
   ]
 }
 EOF
+
 }
 
 resource "aws_sfn_state_machine" "main" {
-  name = "${var.name}"
+  name = var.name
 
-  role_arn = "${aws_iam_role.main.arn}"
+  role_arn = aws_iam_role.main.arn
 
-  definition = "${file("${path.module}/src/index.json")}"
+  definition = file("${path.module}/src/index.json")
 
-  tags = "${var.tags}"
+  tags = var.tags
 }
 
 locals {
@@ -102,6 +106,7 @@ locals {
   ]
 }
 EOF
+
 }
 
 locals {
@@ -113,4 +118,6 @@ locals {
   ]
 }
 EOF
+
 }
+

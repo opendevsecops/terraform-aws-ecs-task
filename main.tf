@@ -1,13 +1,14 @@
-data "aws_region" "current" {}
+data "aws_region" "current" {
+}
 
 locals {
   log_group             = "/ecs/${var.name}"
-  log_retention_in_days = "${var.log_retention_in_days}"
+  log_retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_group" "main" {
-  name              = "${local.log_group}"
-  retention_in_days = "${local.log_retention_in_days}"
+  name              = local.log_group
+  retention_in_days = local.log_retention_in_days
 }
 
 resource "aws_iam_role" "execution" {
@@ -25,10 +26,11 @@ resource "aws_iam_role" "execution" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "execution" {
-  role = "${aws_iam_role.execution.name}"
+  role = aws_iam_role.execution.name
 
   policy = <<EOF
 {
@@ -55,6 +57,7 @@ resource "aws_iam_role_policy" "execution" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role" "task" {
@@ -72,20 +75,21 @@ resource "aws_iam_role" "task" {
   ]
 }
 EOF
+
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family = "${var.name}"
+  family = var.name
 
   network_mode = "awsvpc"
 
   requires_compatibilities = ["FARGATE"]
 
-  execution_role_arn = "${aws_iam_role.execution.arn}"
-  task_role_arn      = "${aws_iam_role.task.arn}"
+  execution_role_arn = aws_iam_role.execution.arn
+  task_role_arn      = aws_iam_role.task.arn
 
-  cpu    = "${var.cpu}"
-  memory = "${var.memory}"
+  cpu    = var.cpu
+  memory = var.memory
 
   container_definitions = <<EOF
 [
@@ -105,4 +109,6 @@ resource "aws_ecs_task_definition" "main" {
   }
 ]
 EOF
+
 }
+
