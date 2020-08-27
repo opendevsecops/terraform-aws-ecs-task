@@ -26,6 +26,16 @@
                 "BackoffRate": 1,
                 "MaxAttempts": 300
             }],
+            "ResultPath": "$.result",
+            "Next": "Publish to SNS"
+        },
+        "Publish to SNS": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::sns:publish",
+            "Parameters": {
+                "TopicArn": "${end_sns_topic_arn}",
+                "Message.$": "$"
+            },
             "End": true
         }
     }

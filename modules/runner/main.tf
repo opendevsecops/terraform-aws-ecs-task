@@ -75,12 +75,36 @@ EOF
 
 }
 
+resource "aws_iam_role_policy" "end_sns_topic" {
+  count = var.end_sns_topic_arn == "" ? 0 : 1
+
+  role = aws_iam_role.main.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": [
+        "${var.end_sns_topic_arn}"
+      ]
+    }
+  ]
+}
+EOF
+
+}
+
 resource "aws_sfn_state_machine" "main" {
   name = var.name
 
   role_arn = aws_iam_role.main.arn
 
-  definition = file("${path.module}/src/index.json")
+  definition = var.end_sns_topic_arn == "" ? file("${path.module}/src/v1.json") : templatefile("${path.module}/src/v2.json", { end_sns_topic_arn = var.end_sns_topic_arn })
 
   tags = var.tags
 }
